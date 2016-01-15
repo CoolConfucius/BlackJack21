@@ -172,10 +172,12 @@ function hit(){
   obj.player.points = softHard(obj.player.hand); 
 
   if ( softHard(obj.dealer.hand) <= 17) {
-    obj.facedown = false; 
     takeCard(obj.dealer.hand, obj.deck);
     obj.dealer.points = softHard(obj.dealer.hand); 
-    obj.dealer.message = "Faceup points: "; 
+    if (obj.dealer.points > 17) {
+      obj.facedown = false; 
+      obj.dealer.message = "Faceup points: "; 
+    };
   };
 
   if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
@@ -220,7 +222,9 @@ function hit(){
       bank += obj.bet; 
       saveToStorage(); 
     } else {
-      compareHands(); 
+      if (!obj.facedown) {
+        compareHands();         
+      };
     }
   }
   updateDisplay(); 
@@ -411,4 +415,6 @@ function loadFromStorage() {
   bank = JSON.parse(localStorage.bank);
   wins = JSON.parse(localStorage.wins);
   loses = JSON.parse(localStorage.loses);
+  $('#score').text(wins + " : " + loses);
+  $('#bank').text(bank);
 }
