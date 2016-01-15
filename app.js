@@ -34,8 +34,10 @@ function init(){
   $('#stand').click(stand);
   $('#rebet').click(rebet);
   $('.chip').click(chip);
+  $('.chip').dblclick(chipIn);
   $('#upBet').click(upBet);
   $('#downBet').click(downBet);
+  $('#clearBet').click(clearBet);
 }
 
 // MVP functions: 
@@ -277,19 +279,43 @@ function reset(){
 // Extra functions: 
 
 function chip(){
-  $('.chip').removeClass('glow');
-  $(this).addClass('glow');
+  if (obj.state === "pregame") {
+    $('.chip').removeClass('glow');
+    $(this).addClass('glow'); 
+  };
 }
 
 function upBet(){
-  var up = parseInt($('.glow').text()); 
-  obj.bet += up; 
-  $('#bet').text(obj.bet);
+  if (obj.state === "pregame") {
+    var up = parseInt($('.glow').text()); 
+    obj.bet += up; 
+    $('#bet').text(obj.bet);
+  };
 }
 
 function downBet(){
-  var down = parseInt($('.glow').text()); 
-  obj.bet -= down; 
-  if (obj.bet <= 0) { obj.bet = 0; };
-  $('#bet').text(obj.bet);
+  if (obj.state === "pregame") {
+    var down = parseInt($('.glow').text()); 
+    obj.bet -= down; 
+    if (obj.bet <= 0) { obj.bet = 0; };
+    $('#bet').text(obj.bet);
+  }
+}
+
+function clearBet(){
+  if (obj.state === "pregame") {
+   obj.bet = 0; 
+   $('#bet').text(obj.bet);
+  }
+}
+
+function chipIn(){
+  if (obj.state === "pregame") {
+    $('.chip').removeClass('glow');
+    var $this = $(this); 
+    $this.addClass('glow'); 
+    var up = parseInt($this.text()); 
+    obj.bet += up; 
+    $('#bet').text(obj.bet);
+  };
 }
