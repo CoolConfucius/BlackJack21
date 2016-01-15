@@ -34,6 +34,8 @@ function init(){
   $('#stand').click(stand);
   $('#rebet').click(rebet);
   $('.chip').click(chip);
+  $('#upBet').click(upBet);
+  $('#downBet').click(downBet);
 }
 
 // MVP functions: 
@@ -268,6 +270,7 @@ function reset(){
   obj.player.message = "PLACE BET"; 
   obj.state = "pregame"; 
   obj.facedown = true; 
+  obj.bet = 0; 
 }; 
 
 
@@ -276,5 +279,17 @@ function reset(){
 function chip(){
   $('.chip').removeClass('glow');
   $(this).addClass('glow');
+}
 
+function upBet(){
+  var up = parseInt($('.glow').text()); 
+  obj.bet += up; 
+  $('#bet').text(obj.bet);
+}
+
+function downBet(){
+  var down = parseInt($('.glow').text()); 
+  obj.bet -= down; 
+  if (obj.bet <= 0) { obj.bet = 0; };
+  $('#bet').text(obj.bet);
 }
