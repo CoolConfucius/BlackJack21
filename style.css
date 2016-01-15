@@ -37,11 +37,6 @@ body {
   margin-left: auto; 
 }
 
-
-
-#digits {
-  color: yellow; }
-
 .btn{
   border-radius: 50%; 
 }
@@ -56,30 +51,53 @@ body {
 
 #upBet, #downBet, #yourBet{
   border-radius: 50%; 
-  border: 6px dotted;
+  border: 9px dotted;
   height: 100px;
   background-color: lime;
   font-size: 24px;
 }
 .chip{
-  border: 6px dotted #919191;
-  height: 70px;
+  border: 12px dotted #919191;
+  height: 80px;
   font-size: 24px;
+}
+
+#chip1{
+  border-color: red;
+}
+
+#chip2{
+  border-color: blue;
+}
+
+#chip3{
+  border-color: lime;
+}
+
+#chip4{
+  border-color: black;
 }
 
 .glow{
   box-shadow: 
-    1px 0px 10px yellow, 0px 1px 10px yellow, 
-    2px 1px 10px yellow, 1px 2px 10px yellow,
-    3px 2px 10px yellow, 2px 3px 10px yellow,    
-    -1px -0px 10px yellow, -0px -1px 10px yellow, 
-    -2px -1px 10px yellow, -1px -2px 10px yellow,
-    -3px -2px 10px yellow, -2px -3px 10px yellow
+    1px 0px 12px yellow, 0px 1px 12px yellow, 
+    2px 1px 12px yellow, 1px 2px 12px yellow,
+    3px 2px 12px yellow, 2px 3px 12px yellow,    
+    -1px -0px 12px yellow, -0px -1px 12px yellow, 
+    -2px -1px 12px yellow, -1px -2px 12px yellow,
+    -3px -2px 12px yellow, -2px -3px 12px yellow
 }
 
 #bottom {
-  background-color: #000; }
+  background-color: #000; 
+  height: 60px; 
+}
 
 #bottomLabels{
   color: white;
+}
+
+#digits{
+  color: yellow;
+  font-size: 26px;
 }
