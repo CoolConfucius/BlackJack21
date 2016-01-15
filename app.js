@@ -28,6 +28,7 @@ obj = {
 }
 
 function init(){
+  loadFromStorage();
   reset(); 
   $('#deal').click(deal); 
   $('#hit').click(hit);
@@ -150,10 +151,12 @@ function deal(){
       alert("You got a BJ at the start! You win!");
       wins += obj.bet;
       bank += obj.bet; 
+      saveToStorage(); 
     } else if (obj.dealer.points === 21){
       alert("Dealer got a BJ at the start! You lose!"); 
       loses += obj.bet;
       bank -= obj.bet; 
+      saveToStorage(); 
     } else {
       obj.player.message = "Points:";
     }
@@ -189,24 +192,33 @@ function hit(){
     alert("You got a BJ!"); 
     wins += obj.bet; 
     bank += obj.bet; 
+    saveToStorage(); 
   } else if (obj.dealer.points === 21) {
     obj.player.message = "Lose"; 
     alert("Dealer got a BJ! You lose!");
     loses += obj.bet;
     bank -= obj.bet; 
+    saveToStorage(); 
   } else {
     if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses += obj.bet; bank -= obj.bet; }
     if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; }
 
     if (obj.player.points > 21 && obj.dealer.points > 21) {
       alert("You both got Busted! But Dealer wins by rules"); 
+      loses += obj.bet; 
+      bank -= obj.bet; 
+      saveToStorage();  
     } else if (obj.player.points > 21) { 
-      obj.player.message = "You got Busted!"; 
+      obj.player.message = "You got Busted!";
+      loses += obj.bet; 
+      bank -= obj.bet; 
+      saveToStorage();  
     } else if (obj.dealer.points > 21) {
       obj.dealer.message = "Dealer got Busted!"
       obj.player.message = "You win!";
       wins += obj.bet; 
       bank += obj.bet; 
+      saveToStorage(); 
     } else {
       compareHands(); 
     }
@@ -231,6 +243,7 @@ function stand(){
     obj.player.message = 'Player 2 got busted! You win!';
     wins += obj.bet; 
     bank += obj.bet;
+    saveToStorage(); 
   } else {
     obj.dealer.message = "Faceup points: "; 
     compareHands();       
@@ -306,10 +319,12 @@ function compareHands(){
     obj.player.message = "You have more points! You win!";
     wins += obj.bet; 
     bank += obj.bet;
+    saveToStorage(); 
   } else {
     obj.player.message = "Dealer has more points than you! You lose!";
     loses += obj.bet; 
     bank -= obj.bet;
+    saveToStorage(); 
   }
   obj.state = "gameOver"; 
 };
@@ -376,4 +391,24 @@ function chipIn(){
     if (obj.bet >= 1000) { obj.bet = 1000; };
     $('#bet').text(obj.bet);
   };
+}
+
+
+// storage functions: 
+
+function saveToStorage() {
+  console.log("Save:", bank, wins, loses);
+  localStorage.bank = JSON.stringify(bank);
+  localStorage.wins = JSON.stringify(wins);
+  localStorage.loses = JSON.stringify(loses);
+}
+
+function loadFromStorage() {
+  console.log("Load:", bank, wins, loses);
+  if(!localStorage.bank) { localStorage.bank = '1000'; }
+  if(!localStorage.wins) { localStorage.wins = '0'; }
+  if(!localStorage.loses) { localStorage.loses = '0'; }
+  bank = JSON.parse(localStorage.bank);
+  wins = JSON.parse(localStorage.wins);
+  loses = JSON.parse(localStorage.loses);
 }
