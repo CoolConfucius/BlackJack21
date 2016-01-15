@@ -32,7 +32,7 @@ function init(){
   $('#deal').click(deal); 
   $('#hit').click(hit);
   $('#stand').click(stand);
-  $('#rebet').click(rebet);
+  $('#replay').click(replay);
   $('.chip').click(chip);
   $('.chip').dblclick(chipIn);
   $('#upBet').click(upBet);
@@ -55,6 +55,7 @@ function updateDisplay(){
 
     $('#playerPoints').text('');
     $('#dealerPoints').text('');
+    $('#bet').text(obj.bet);
     return; 
   };
 
@@ -64,7 +65,7 @@ function updateDisplay(){
     });    
     $('#playerPoints').text(obj.player.points);
   } else {
-    obj.state = 'gameOver'; 
+    obj.state = 'gameOver';     
   };
 
   if (obj.facedown) {
@@ -79,6 +80,8 @@ function updateDisplay(){
 
   $('#playerMessage').text(obj.player.message);
   $('#dealerMessage').text(obj.dealer.message);
+  $('#score').text(wins + " : " + loses);
+  $('#bank').text(bank);
 }
 
 function deal(){
@@ -101,9 +104,12 @@ function deal(){
       alert("You both got BJs at the start!"); 
     } else if (obj.player.points === 21) {
       alert("You got a BJ at the start! You win!");
-      wins++;
+      wins += obj.bet;
+      bank += obj.bet; 
     } else if (obj.dealer.points === 21){
       alert("Dealer got a BJ at the start! You lose!"); 
+      loses += obj.bet;
+      bank -= obj.bet; 
     } else {
       obj.player.message = "Points:";
     }
@@ -137,13 +143,15 @@ function hit(){
     alert("You both got BJs!"); 
   } else if (obj.player.points === 21) { 
     alert("You got a BJ!"); 
-    wins++; 
+    wins += obj.bet; 
+    bank += obj.bet; 
   } else if (obj.dealer.points === 21) {
     obj.player.message = "Lose"; 
     alert("Dealer got a BJ! You lose!");
-    loses++;
+    loses += obj.bet;
+    bank -= obj.bet; 
   } else {
-    if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses++; }
+    if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses += obj.bet; bank -= obj.bet; }
     if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; }
 
     if (obj.player.points > 21 && obj.dealer.points > 21) {
@@ -153,7 +161,8 @@ function hit(){
     } else if (obj.dealer.points > 21) {
       obj.dealer.message = "Dealer got Busted!"
       obj.player.message = "You win!";
-      wins++; 
+      wins += obj.bet; 
+      bank += obj.bet; 
     } else {
       compareHands(); 
     }
@@ -176,7 +185,8 @@ function stand(){
   if (obj.dealer.points > 21) {
     obj.dealer.message = "Bust"; 
     obj.player.message = 'Player 2 got busted! You win!';
-    wins++; 
+    wins += obj.bet; 
+    bank += obj.bet;
   } else {
     obj.dealer.message = "Faceup points: "; 
     compareHands();       
@@ -185,7 +195,7 @@ function stand(){
   updateDisplay(); 
 };
 
-function rebet(){
+function replay(){
   if (obj.state === 'gameOver') {
     reset(); 
     updateDisplay(); 
@@ -250,10 +260,12 @@ function compareHands(){
     obj.dealer.message = "Tie";
   } else if (obj.player.points > obj.dealer.points) {
     obj.player.message = "You have more points! You win!";
-    wins++; 
+    wins += obj.bet; 
+    bank += obj.bet;
   } else {
     obj.player.message = "Dealer has more points than you! You lose!";
-    loses++; 
+    loses += obj.bet; 
+    bank -= obj.bet;
   }
   obj.state = "gameOver"; 
 };
