@@ -33,7 +33,7 @@ function init(){
   $('#hit').click(hit);
   $('#stand').click(stand);
   $('#rebet').click(rebet);
-  $('.chip').click(chipIn);
+  $('.chip').click(chip);
 }
 
 // MVP functions: 
@@ -273,7 +273,8 @@ function reset(){
 
 // Extra functions: 
 
-function chipIn(){
-
+function chip(){
+  $('.chip').removeClass('glow');
+  $(this).addClass('glow');
 
 }
