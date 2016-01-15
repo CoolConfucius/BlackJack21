@@ -345,6 +345,7 @@ function upBet(){
   if (obj.state === "pregame") {
     var up = parseInt($('.glow').text()); 
     obj.bet += up; 
+    if (obj.bet >= 1000) { obj.bet = 1000; };
     $('#bet').text(obj.bet);
   };
 }
@@ -372,6 +373,7 @@ function chipIn(){
     $this.addClass('glow'); 
     var up = parseInt($this.text()); 
     obj.bet += up; 
+    if (obj.bet >= 1000) { obj.bet = 1000; };
     $('#bet').text(obj.bet);
   };
 }
