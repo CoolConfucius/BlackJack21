@@ -8,7 +8,7 @@ var loses = 0;
 obj = {
   makeDeck: function(){
     obj.deck = []; 
-    var suits = ['\u2663', '\u2662', '\u2660', '\u2661'];
+    var suits = ['\u2663', '\u2666', '\u2660', '\u2665'];
     var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     if (obj.numberDecks === 1) {
       suits.forEach(function(suit){
@@ -44,6 +44,7 @@ function init(){
 
 function updateDisplay(){
   if (obj.state === "pregame") {
+    $('.card').removeClass('heart club diamond');
     $('#playerHand').children('.card').each(function(index){
       $(this).text('');
     });
@@ -61,7 +62,22 @@ function updateDisplay(){
 
   if (obj.state !== 'stand') {
     $('#playerHand').children('.card').each(function(index){
-      $(this).text(obj.player.hand[index]);
+      var $this = $(this);
+      if (obj.player.hand[index]) {
+        if (obj.player.hand[index].includes('\u2663')) {
+          console.log('club');
+          $this.addClass('club');
+        } else if (obj.player.hand[index].includes('\u2665')){
+          $this.addClass('heart');
+          console.log('heart');
+        } else if (obj.player.hand[index].includes('\u2666')) {
+          $this.addClass('diamond');
+          console.log('diamond');
+        } else {
+          console.log('spade');
+        }
+      };
+      $this.text(obj.player.hand[index]);
     });    
     $('#playerPoints').text(obj.player.points);
   } else {
@@ -69,11 +85,39 @@ function updateDisplay(){
   };
 
   if (obj.facedown) {
-    $('#dealerSlot0').text(obj.dealer.hand[0]);
+    var $slot = $('#dealerSlot0');
+    if (obj.dealer.hand[0].includes('\u2663')) {
+      console.log('club');
+      $slot.addClass('club');
+    } else if (obj.dealer.hand[0].includes('\u2665')){
+      $slot.addClass('heart');
+      console.log('heart');
+    } else if (obj.dealer.hand[0].includes('\u2666')) {
+      $slot.addClass('diamond');
+      console.log('diamond');
+    } else {
+      console.log('spade');
+    }
+    $slot.text(obj.dealer.hand[0]);
     $('#dealerSlot1').text('\uFFFD');
   } else {
     $('#dealerHand').children('.card').each(function(index){
-      $(this).text(obj.dealer.hand[index]);
+      var $this = $(this);
+      if (obj.dealer.hand[index]) {
+        if (obj.dealer.hand[index].includes('\u2663')) {
+          console.log('club');
+          $this.addClass('club');
+        } else if (obj.dealer.hand[index].includes('\u2665')){
+          $this.addClass('heart');
+          console.log('heart');
+        } else if (obj.dealer.hand[index].includes('\u2666')) {
+          $this.addClass('diamond');
+          console.log('diamond');
+        } else {
+          console.log('spade');
+        }
+      };
+      $this.text(obj.dealer.hand[index]);
     });
     $('#dealerPoints').text(obj.dealer.points);
   }
@@ -318,7 +362,7 @@ function clearBet(){
   if (obj.state === "pregame") {
    obj.bet = 0; 
    $('#bet').text(obj.bet);
-  }
+ }
 }
 
 function chipIn(){
