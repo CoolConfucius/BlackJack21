@@ -9,7 +9,18 @@ body {
   background-color: green; }
 
 #head{
-  height: 32px; 
+  margin-top: 16px; 
+  height: 30px; 
+}
+
+#rules{
+  color: white;
+  text-decoration: underline;
+}
+
+#rules:hover{
+  cursor: crosshair;
+  color: lime;
 }
 
 .message{

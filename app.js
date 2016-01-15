@@ -39,6 +39,7 @@ function init(){
   $('#upBet').click(upBet);
   $('#downBet').click(downBet);
   $('#clearBet').click(clearBet);
+  $('#rules').click(rules);
 }
 
 // MVP functions: 
@@ -159,10 +160,10 @@ function hit(){
   takeCard(obj.player.hand, obj.deck);
   obj.player.points = softHard(obj.player.hand); 
 
-  if ( softHard(obj.dealer.hand) <= 17) {
+  if ( softHard(obj.dealer.hand) < 17) {
     takeCard(obj.dealer.hand, obj.deck);
     obj.dealer.points = softHard(obj.dealer.hand); 
-    if (obj.dealer.points > 17) {
+    if (obj.dealer.points >= 17) {
       obj.facedown = false; 
       obj.dealer.message = "Faceup points: "; 
     };
@@ -223,7 +224,7 @@ function stand(){
   obj.state = 'stand'; 
   obj.facedown = false; 
 
-  while( softHard(obj.dealer.hand) <= 17 ){
+  while( softHard(obj.dealer.hand) < 17 ){
     takeCard(obj.dealer.hand, obj.deck);
   }
   
@@ -382,6 +383,11 @@ function chipIn(){
     if (obj.bet >= 1000) { obj.bet = 1000; };
     $('#bet').text(obj.bet);
   };
+}
+
+function rules(){
+  var text = "The game is played with a standard 52 card deck. All of the cards have a point value. The face cards are worth 10 (Jack, Queen, King). The numbered cards are worth their number amount. (2 - 10). The Ace is worth 11, but each Ace may be lowered to 1 once. The object of the game is to have a higher point total than the dealer, but without going over 21. You compute your score by adding the values of your individual cards. Two cards are dealt to each player.  Initially, the player may see their own cards, and one card of the the dealer. On the player's turn, they may either hit (draw an extra card) or stand (keep their hand as it is.)  If they get over 21 points (bust), they immediately lose. After the player stands, the dealer will reveal their cards and play automatically.  (if the dealer has a score of at least 17, they will stand, else they will hit.) After the dealer plays, if no one has busted, whoever has the most points wins.";
+  alert(text); 
 }
 
 
