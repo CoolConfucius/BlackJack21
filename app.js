@@ -39,6 +39,7 @@ function init(){
   $('#upBet').click(upBet);
   $('#downBet').click(downBet);
   $('#clearBet').click(clearBet);
+  $('#rules').click(rules);
 }
 
 // MVP functions: 
@@ -66,16 +67,12 @@ function updateDisplay(){
       var $this = $(this);
       if (obj.player.hand[index]) {
         if (obj.player.hand[index].includes('\u2663')) {
-          console.log('club');
           $this.addClass('club');
         } else if (obj.player.hand[index].includes('\u2665')){
           $this.addClass('heart');
-          console.log('heart');
         } else if (obj.player.hand[index].includes('\u2666')) {
           $this.addClass('diamond');
-          console.log('diamond');
         } else {
-          console.log('spade');
         }
       };
       $this.text(obj.player.hand[index]);
@@ -88,16 +85,12 @@ function updateDisplay(){
   if (obj.facedown) {
     var $slot = $('#dealerSlot0');
     if (obj.dealer.hand[0].includes('\u2663')) {
-      console.log('club');
       $slot.addClass('club');
     } else if (obj.dealer.hand[0].includes('\u2665')){
       $slot.addClass('heart');
-      console.log('heart');
     } else if (obj.dealer.hand[0].includes('\u2666')) {
       $slot.addClass('diamond');
-      console.log('diamond');
     } else {
-      console.log('spade');
     }
     $slot.text(obj.dealer.hand[0]);
     $('#dealerSlot1').text('\uFFFD');
@@ -106,16 +99,12 @@ function updateDisplay(){
       var $this = $(this);
       if (obj.dealer.hand[index]) {
         if (obj.dealer.hand[index].includes('\u2663')) {
-          console.log('club');
           $this.addClass('club');
         } else if (obj.dealer.hand[index].includes('\u2665')){
           $this.addClass('heart');
-          console.log('heart');
         } else if (obj.dealer.hand[index].includes('\u2666')) {
           $this.addClass('diamond');
-          console.log('diamond');
         } else {
-          console.log('spade');
         }
       };
       $this.text(obj.dealer.hand[index]);
@@ -142,8 +131,8 @@ function deal(){
     obj.player.points = softHard(obj.player.hand);
     obj.dealer.points = softHard(obj.dealer.hand);
 
-    if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
-    if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
+    if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
+    if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
 
     if (obj.player.points === 21 && obj.dealer.points === 21) {
       alert("You both got BJs at the start!"); 
@@ -171,22 +160,21 @@ function hit(){
   takeCard(obj.player.hand, obj.deck);
   obj.player.points = softHard(obj.player.hand); 
 
-  if ( softHard(obj.dealer.hand) <= 17) {
+  if ( softHard(obj.dealer.hand) < 17) {
     takeCard(obj.dealer.hand, obj.deck);
     obj.dealer.points = softHard(obj.dealer.hand); 
-    if (obj.dealer.points > 17) {
+    if (obj.dealer.points >= 17) {
       obj.facedown = false; 
       obj.dealer.message = "Faceup points: "; 
     };
   };
 
-  if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
-  if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
+  if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
+  if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
 
   if (obj.player.points >= 21 || obj.dealer.points >= 21 ) {
     obj.state = 'gameOver'; 
   }
-  console.log(obj.player.points, obj.dealer.points); 
   
   if (obj.player.points === 21 && obj.dealer.points === 21) {       
     alert("You both got BJs!"); 
@@ -202,8 +190,13 @@ function hit(){
     bank -= obj.bet; 
     saveToStorage(); 
   } else {
-    if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses += obj.bet; bank -= obj.bet; }
-    if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; }
+    if (obj.player.points > 21) { 
+      obj.player.message = "Bust"; obj.state = "gameOver"; 
+      obj.facedown = false; 
+      loses += obj.bet; bank -= obj.bet; 
+      saveToStorage(); 
+    }
+    if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; obj.facedown = false; }
 
     if (obj.player.points > 21 && obj.dealer.points > 21) {
       alert("You both got Busted! But Dealer wins by rules"); 
@@ -236,7 +229,7 @@ function stand(){
   obj.state = 'stand'; 
   obj.facedown = false; 
 
-  while( softHard(obj.dealer.hand) <= 17 ){
+  while( softHard(obj.dealer.hand) < 17 ){
     takeCard(obj.dealer.hand, obj.deck);
   }
   
@@ -397,18 +390,21 @@ function chipIn(){
   };
 }
 
+function rules(){
+  var text = "The game is played with a standard 52 card deck. All of the cards have a point value. The face cards are worth 10 (Jack, Queen, King). The numbered cards are worth their number amount. (2 - 10). The Ace is worth 11, but each Ace may be lowered to 1 once. The object of the game is to have a higher point total than the dealer, but without going over 21. You compute your score by adding the values of your individual cards. Two cards are dealt to each player.  Initially, the player may see their own cards, and one card of the the dealer. On the player's turn, they may either hit (draw an extra card) or stand (keep their hand as it is.)  If they get over 21 points (bust), they immediately lose. After the player stands, the dealer will reveal their cards and play automatically.  (if the dealer has a score of at least 17, they will stand, else they will hit.) After the dealer plays, if no one has busted, whoever has the most points wins.";
+  alert(text); 
+}
+
 
 // storage functions: 
 
 function saveToStorage() {
-  console.log("Save:", bank, wins, loses);
   localStorage.bank = JSON.stringify(bank);
   localStorage.wins = JSON.stringify(wins);
   localStorage.loses = JSON.stringify(loses);
 }
 
 function loadFromStorage() {
-  console.log("Load:", bank, wins, loses);
   if(!localStorage.bank) { localStorage.bank = '1000'; }
   if(!localStorage.wins) { localStorage.wins = '0'; }
   if(!localStorage.loses) { localStorage.loses = '0'; }
