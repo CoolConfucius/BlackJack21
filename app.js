@@ -1,9 +1,9 @@
 $(document).ready(init);
 
 var obj = {};
-var bank;
-var wins; 
-var loses; 
+var bank = 1000; 
+var wins = 0; 
+var loses = 0; 
 
 obj = {
   makeDeck: function(){
@@ -23,33 +23,37 @@ obj = {
   },
   
   shuffleDeck: function(){
-    _.shuffle(obj.deck); 
+    obj.deck = _.shuffle(obj.deck); 
   }
 }
 
 function init(){
-  obj.numberDecks = 1; 
-  obj.makeDeck();
-  obj.shuffleDeck; 
-  obj.dealer = {}; 
-  obj.dealer.hand = [];
-  obj.dealer.points = 0; 
-  obj.dealer.message = '';
-  obj.player = {}; 
-  obj.player.hand = []; 
-  obj.player.points = 0; 
-  obj.player.message = "PLACE BET"; 
-  obj.state = "pregame"; 
-  obj.facedown = "true"; 
-
   reset(); 
   $('#deal').click(deal); 
   $('#hit').click(hit);
   $('#stand').click(stand);
   $('#rebet').click(rebet);
+  $('.chip').click(chipIn);
 }
 
+// MVP functions: 
+
 function updateDisplay(){
+  if (obj.state === "pregame") {
+    $('#playerHand').children('.card').each(function(index){
+      $(this).text('');
+    });
+    $('#dealerHand').children('.card').each(function(index){
+      $(this).text('');
+    });
+    $('#playerMessage').text('PLACE BET');
+    $('#dealerMessage').text('');
+
+    $('#playerPoints').text('');
+    $('#dealerPoints').text('');
+    return; 
+  };
+
   if (obj.state !== 'stand') {
     $('#playerHand').children('.card').each(function(index){
       $(this).text(obj.player.hand[index]);
@@ -59,9 +63,9 @@ function updateDisplay(){
     obj.state = 'gameOver'; 
   };
 
-  if (obj.facedown && obj.state !== 'pregame') {
+  if (obj.facedown) {
     $('#dealerSlot0').text(obj.dealer.hand[0]);
-    $('#dealerSlot1').text('Facedown');
+    $('#dealerSlot1').text('\uFFFD');
   } else {
     $('#dealerHand').children('.card').each(function(index){
       $(this).text(obj.dealer.hand[index]);
@@ -74,7 +78,6 @@ function updateDisplay(){
 }
 
 function deal(){
-  console.log("Deck,: ", obj.deck); 
   if (obj.state === 'pregame') {
     obj.state = "started";
     obj.facedown = true; 
@@ -83,10 +86,9 @@ function deal(){
     obj.dealer.message = "Faceup points: " + softHard(obj.dealer.hand).toString(); 
 
     takeCard(obj.player.hand, obj.deck);
-    takeCard(obj.dealer.hand, obj.deck); // facedown. find a way to implement it. 
+    takeCard(obj.dealer.hand, obj.deck); 
     obj.player.points = softHard(obj.player.hand);
     obj.dealer.points = softHard(obj.dealer.hand);
-
 
     if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
     if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
@@ -99,7 +101,6 @@ function deal(){
     } else if (obj.dealer.points === 21){
       alert("Dealer got a BJ at the start! You lose!"); 
     } else {
-      // obj.player.message = obj.player.points.toString();
       obj.player.message = "Points:";
     }
 
@@ -108,87 +109,76 @@ function deal(){
 };
 
 function hit(){
-  if (obj.state === "started") {
+  if (obj.state !== "started") { return; }
+  
+  takeCard(obj.player.hand, obj.deck);
+  obj.player.points = softHard(obj.player.hand); 
 
-    takeCard(obj.player.hand, obj.deck);
-    obj.player.points = softHard(obj.player.hand); 
+  if ( softHard(obj.dealer.hand) <= 17) {
+    obj.facedown = false; 
+    takeCard(obj.dealer.hand, obj.deck);
+    obj.dealer.points = softHard(obj.dealer.hand); 
+    obj.dealer.message = "Faceup points: "; 
+  };
 
-    if ( softHard(obj.dealer.hand) <= 17) {
-      obj.facedown = false; 
-      takeCard(obj.dealer.hand, obj.deck);
-      obj.dealer.points = softHard(obj.dealer.hand); 
-      // obj.dealer.message = obj.dealer.points.toString(); 
-      obj.dealer.message = "Faceup points: "; 
-    };
+  if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
+  if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
 
-    if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
-    if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
-
-    if (obj.player.points >= 21 || obj.dealer.points >= 21 ) {
-      obj.state = 'gameOver'; 
-    }
-    console.log(obj.player.points, obj.dealer.points); 
-    
-    if (obj.player.points === 21 && obj.dealer.points === 21) {       
-      alert("You both got BJs!"); 
-    } else if (obj.player.points === 21) { 
-      alert("You got a BJ!"); 
-    } else if (obj.dealer.points === 21) {
-      alert("Dealer got a BJ! You lose!");
-    }; 
-
+  if (obj.player.points >= 21 || obj.dealer.points >= 21 ) {
+    obj.state = 'gameOver'; 
+  }
+  console.log(obj.player.points, obj.dealer.points); 
+  
+  if (obj.player.points === 21 && obj.dealer.points === 21) {       
+    alert("You both got BJs!"); 
+  } else if (obj.player.points === 21) { 
+    alert("You got a BJ!"); 
+    wins++; 
+  } else if (obj.dealer.points === 21) {
+    obj.player.message = "Lose"; 
+    alert("Dealer got a BJ! You lose!");
+    loses++;
+  } else {
     if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses++; }
     if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; }
 
     if (obj.player.points > 21 && obj.dealer.points > 21) {
       alert("You both got Busted! But Dealer wins by rules"); 
-      } else if (obj.player.points > 21) { 
-        obj.player.message = "You got Busted!"; 
-      } else if (obj.dealer.points > 21) {
-        obj.dealer.message = "Dealer got Busted!"
-        obj.player.message = "You win!";
-        wins++; 
-      } else {
-        if (obj.player.points > obj.dealer.points) {
-          obj.player.message = "You have more points! You win!";
-          wins++; 
-        } else {
-          obj.player.message = "Dealer has more points than you! You lose!";
-          loses++; 
-        }
-      }
+    } else if (obj.player.points > 21) { 
+      obj.player.message = "You got Busted!"; 
+    } else if (obj.dealer.points > 21) {
+      obj.dealer.message = "Dealer got Busted!"
+      obj.player.message = "You win!";
+      wins++; 
+    } else {
+      compareHands(); 
     }
-
-    updateDisplay(); 
-  };
+  }
+  updateDisplay(); 
 };
 
 function stand(){
-  if (obj.state === "started") {
-    obj.state = 'stand'; 
-    obj.facedown = false; 
+  if (obj.state !== "started") { return; }
+  
+  obj.state = 'stand'; 
+  obj.facedown = false; 
 
-    while( softHard(obj.dealer.hand) <= 17 ){
-      takeCard(obj.dealer.hand, obj.deck);
-    }
-    
-    obj.dealer.points = softHard(obj.dealer.hand); 
+  while( softHard(obj.dealer.hand) <= 17 ){
+    takeCard(obj.dealer.hand, obj.deck);
+  }
+  
+  obj.dealer.points = softHard(obj.dealer.hand); 
 
-    if (obj.dealer.points2 === 21) {
-      obj.player.message = 'Player 2 has a BJ! You lose!';
-    } else {
-      if (obj.dealer.points > 21) {
-        obj.player.message = 'Player 2 got busted! You win!';
-      } else {
-        obj.player.points = softHard(obj.player.hand); 
-        obj.player.message = obj.player.points > obj.dealer.points ? "You have more points! You win!" : "Dealer has more points than you! You lose!"; 
-      } 
-    }
-
-    // obj.dealer.message = obj.dealer.points.toString(); 
+  if (obj.dealer.points > 21) {
+    obj.dealer.message = "Bust"; 
+    obj.player.message = 'Player 2 got busted! You win!';
+    wins++; 
+  } else {
     obj.dealer.message = "Faceup points: "; 
-    updateDisplay(); 
-  };
+    compareHands();       
+  } 
+  
+  updateDisplay(); 
 };
 
 function rebet(){
@@ -245,16 +235,29 @@ return points;
 
 
 function takeCard(hand, deck){
-  console.log('hand', hand);
-  console.log('deck', deck);
   hand.push(deck[0]); 
   deck.shift(); 
 }; 
 
+function compareHands(){
+  if (obj.player.points === obj.dealer.points) {
+    alert("It's a tie!");
+    obj.player.message = "Tie";
+    obj.dealer.message = "Tie";
+  } else if (obj.player.points > obj.dealer.points) {
+    obj.player.message = "You have more points! You win!";
+    wins++; 
+  } else {
+    obj.player.message = "Dealer has more points than you! You lose!";
+    loses++; 
+  }
+  obj.state = "gameOver"; 
+};
+
 function reset(){
   obj.numberDecks = 1; 
   obj.makeDeck();
-  obj.shuffleDeck; 
+  obj.shuffleDeck(); 
   obj.dealer = {}; 
   obj.dealer.hand = [];
   obj.dealer.points = 0; 
@@ -264,6 +267,13 @@ function reset(){
   obj.player.points = 0; 
   obj.player.message = "PLACE BET"; 
   obj.state = "pregame"; 
-  obj.facedown = "true"; 
+  obj.facedown = true; 
 }; 
 
+
+// Extra functions: 
+
+function chipIn(){
+
+
+}

@@ -1,6 +1,8 @@
 * {
   text-align: center;
   font-size: 16px; 
+  vertical-align: middle;
+  overflow: auto; 
 }
 
 body {
@@ -29,20 +31,13 @@ body {
 #center {
   color: white;
   background-color: #000;
-  /*border: solid;
-  border-color: yellow;*/
   border: 3px solid yellow;
   width: 90%; 
   margin-right: auto; 
   margin-left: auto; 
 }
 
-#bottom {
-  background-color: #000; }
 
-#bottomLabels{
-  color: white;
-}
 
 #digits {
   color: yellow; }
@@ -51,4 +46,40 @@ body {
   border-radius: 50%; 
 }
 
-/*# sourceMappingURL=style.css.map */
+#moves > button {
+  background-color: #E0C482;
+  color: #40310F;
+  border: 6px solid;
+}
+
+
+
+#upBet, #downBet, #yourBet{
+  border-radius: 50%; 
+  border: 6px dotted;
+  height: 100px;
+  background-color: lime;
+  font-size: 24px;
+}
+.chip{
+  border: 6px dotted #919191;
+  height: 70px;
+  font-size: 24px;
+}
+
+.glow{
+  box-shadow: 
+    1px 0px 10px yellow, 0px 1px 10px yellow, 
+    2px 1px 10px yellow, 1px 2px 10px yellow,
+    3px 2px 10px yellow, 2px 3px 10px yellow,    
+    -1px -0px 10px yellow, -0px -1px 10px yellow, 
+    -2px -1px 10px yellow, -1px -2px 10px yellow,
+    -3px -2px 10px yellow, -2px -3px 10px yellow
+}
+
+#bottom {
+  background-color: #000; }
+
+#bottomLabels{
+  color: white;
+}

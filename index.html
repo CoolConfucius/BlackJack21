@@ -31,10 +31,14 @@
     
     <div class="row hand" id="dealerHand">
       <div class="col-sm-1"></div>
-      <div class="col-sm-2 card" id="dealerSlot0"></div>
-      <div class="col-sm-2 card" id="dealerSlot1"></div>
-      <div class="col-sm-2 card" id="dealerSlot2"></div>
-      <div class="col-sm-2 card" id="dealerSlot3"></div>
+      <div class="col-sm-1 card" id="dealerSlot0"></div>
+      <div class="col-sm-1 card" id="dealerSlot1"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
       <div class="col-sm-3"></div>
     </div>
   </div>
@@ -46,12 +50,15 @@
   <div class="container" id="PLAYER">
     <div class="row hand" id="playerHand">
       <div class="col-sm-1"></div>
-      <div class="col-sm-2 card" id="playerSlot0"></div>
-      <div class="col-sm-2 card" id="playerSlot1"></div>
-      <div class="col-sm-2 card" id="playerSlot2"></div>
-      <div class="col-sm-2 card" id="playerSlot3"></div>
-      <div class="col-sm-1" id="placeBet"></div>
-      <div class="col-sm-2"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-1 card"></div>
+      <div class="col-sm-3"></div>
     </div>
     <div class="row message">
       <div class="col-sm-6" id="playerMessage">PLACE BET</div>
@@ -66,30 +73,35 @@
       <button class="col-sm-2 btn btn-default btn-lg" type="button" id="rebet">Rebet</button>      
     </div>
     <div class="row" id="chips">
-      <butten class="col-sm-1 chip btn btn-default btn-lg" id="chip1">1</butten>
+      <butten class="col-sm-1 chip btn btn-default btn-lg glow" id="chip1">1</butten>
       <butten class="col-sm-1 chip btn btn-default btn-lg" id="chip2">5</butten>
       <butten class="col-sm-1 chip btn btn-default btn-lg" id="chip3">10</butten>
       <butten class="col-sm-1 chip btn btn-default btn-lg" id="chip4">25</butten>
       <butten class="col-sm-1 chip btn btn-default btn-lg" id="chip5">100</butten>
+      <span class="col-sm-1 col-sm-offset-1"></span>
+      <div class="col-sm-1" id="yourBet">0</div>
+      <button class="col-sm-2 btn btn-default btn-lg" id="upBet">Increase Bet</button>
+      <button class="col-sm-2 btn btn-default btn-lg" id="downBet">Decrease Bet</button>
     </div>
   </div>
-  <div class="container" id="bottom">
-    <div class="row" id="bottomLabels">
-      <div class="col-sm-4">BANKROLL</div>
-      <div class="col-sm-4">BET</div>
-      <div class="col-sm-4">WIN</div>
-    </div>
-    <div class="row" id="digits">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4"></div>
-    </div>
+</div>
+<div class="container" id="bottom">
+  <div class="row" id="bottomLabels">
+    <div class="col-sm-4">BANKROLL</div>
+    <div class="col-sm-4">BET</div>
+    <div class="col-sm-4">WIN</div>
   </div>
+  <div class="row" id="digits">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4"></div>
+  </div>
+</div>
 
 
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.0/lodash.min.js"></script>
-  <script src="app.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.0/lodash.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
