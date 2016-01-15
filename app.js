@@ -131,8 +131,8 @@ function deal(){
     obj.player.points = softHard(obj.player.hand);
     obj.dealer.points = softHard(obj.dealer.hand);
 
-    if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
-    if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
+    if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
+    if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
 
     if (obj.player.points === 21 && obj.dealer.points === 21) {
       alert("You both got BJs at the start!"); 
@@ -169,8 +169,8 @@ function hit(){
     };
   };
 
-  if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; }
-  if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; }
+  if (obj.player.points === 21) { obj.player.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
+  if (obj.dealer.points === 21) { obj.dealer.message = "BJ"; obj.state = "gameOver"; obj.facedown = false; }
 
   if (obj.player.points >= 21 || obj.dealer.points >= 21 ) {
     obj.state = 'gameOver'; 
@@ -190,8 +190,13 @@ function hit(){
     bank -= obj.bet; 
     saveToStorage(); 
   } else {
-    if (obj.player.points > 21) { obj.player.message = "Bust"; obj.state = "gameOver"; loses += obj.bet; bank -= obj.bet; }
-    if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; }
+    if (obj.player.points > 21) { 
+      obj.player.message = "Bust"; obj.state = "gameOver"; 
+      obj.facedown = false; 
+      loses += obj.bet; bank -= obj.bet; 
+      saveToStorage(); 
+    }
+    if (obj.dealer.points > 21) { obj.dealer.message = "Bust"; obj.state = "gameOver"; obj.facedown = false; }
 
     if (obj.player.points > 21 && obj.dealer.points > 21) {
       alert("You both got Busted! But Dealer wins by rules"); 
