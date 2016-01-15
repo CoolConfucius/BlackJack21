@@ -66,16 +66,12 @@ function updateDisplay(){
       var $this = $(this);
       if (obj.player.hand[index]) {
         if (obj.player.hand[index].includes('\u2663')) {
-          console.log('club');
           $this.addClass('club');
         } else if (obj.player.hand[index].includes('\u2665')){
           $this.addClass('heart');
-          console.log('heart');
         } else if (obj.player.hand[index].includes('\u2666')) {
           $this.addClass('diamond');
-          console.log('diamond');
         } else {
-          console.log('spade');
         }
       };
       $this.text(obj.player.hand[index]);
@@ -88,16 +84,12 @@ function updateDisplay(){
   if (obj.facedown) {
     var $slot = $('#dealerSlot0');
     if (obj.dealer.hand[0].includes('\u2663')) {
-      console.log('club');
       $slot.addClass('club');
     } else if (obj.dealer.hand[0].includes('\u2665')){
       $slot.addClass('heart');
-      console.log('heart');
     } else if (obj.dealer.hand[0].includes('\u2666')) {
       $slot.addClass('diamond');
-      console.log('diamond');
     } else {
-      console.log('spade');
     }
     $slot.text(obj.dealer.hand[0]);
     $('#dealerSlot1').text('\uFFFD');
@@ -106,16 +98,12 @@ function updateDisplay(){
       var $this = $(this);
       if (obj.dealer.hand[index]) {
         if (obj.dealer.hand[index].includes('\u2663')) {
-          console.log('club');
           $this.addClass('club');
         } else if (obj.dealer.hand[index].includes('\u2665')){
           $this.addClass('heart');
-          console.log('heart');
         } else if (obj.dealer.hand[index].includes('\u2666')) {
           $this.addClass('diamond');
-          console.log('diamond');
         } else {
-          console.log('spade');
         }
       };
       $this.text(obj.dealer.hand[index]);
@@ -186,7 +174,6 @@ function hit(){
   if (obj.player.points >= 21 || obj.dealer.points >= 21 ) {
     obj.state = 'gameOver'; 
   }
-  console.log(obj.player.points, obj.dealer.points); 
   
   if (obj.player.points === 21 && obj.dealer.points === 21) {       
     alert("You both got BJs!"); 
@@ -401,14 +388,12 @@ function chipIn(){
 // storage functions: 
 
 function saveToStorage() {
-  console.log("Save:", bank, wins, loses);
   localStorage.bank = JSON.stringify(bank);
   localStorage.wins = JSON.stringify(wins);
   localStorage.loses = JSON.stringify(loses);
 }
 
 function loadFromStorage() {
-  console.log("Load:", bank, wins, loses);
   if(!localStorage.bank) { localStorage.bank = '1000'; }
   if(!localStorage.wins) { localStorage.wins = '0'; }
   if(!localStorage.loses) { localStorage.loses = '0'; }
